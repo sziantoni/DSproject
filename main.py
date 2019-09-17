@@ -4,7 +4,7 @@ from tkinter import filedialog
 
 
 root = Tk()
-root.filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+root.filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("txt","*.txt"),("all files","*.*")))
 f=open(root.filename)
 f.readline()
 for x in f:
