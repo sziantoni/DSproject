@@ -6,7 +6,16 @@ root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
                                            filetypes=(("txt", "*.txt"), ("all files", "*.*")))
 f = open(root.filename)
 
+nClienti = f.readline()
+ciao = f.readline()
+nVeicoli = f.readline()
+
+print(nClienti)
+print(nVeicoli)
+
 for x in f:
-    print(x)
+    s = f.readline()
+    print(s)
+
 
 f.close()
