@@ -1,13 +1,17 @@
 from tkinter import *
 from tkinter import filedialog
 
+#Apertura file
 root = Tk()
 root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
                                            filetypes=(("txt", "*.txt"), ("all files", "*.*")))
 f = open(root.filename)
 
+#Lettura numero clienti
 nClienti = f.readline()
-ciao = f.readline()
+f.readline()
+
+#Lettura numero veicoli
 nVeicoli = f.readline()
 
 print(nClienti)
