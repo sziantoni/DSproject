@@ -13,9 +13,20 @@ nVeicoli = f.readline()
 print(nClienti)
 print(nVeicoli)
 
-for x in f:
-    s = f.readline()
-    print(s)
+s = f.readline()
+currentLine = s.split("   ")
+x_dep = currentLine[0]
+y_dep = currentLine[1]
+capacity_dep = currentLine[3]
+print("Deposito : x: " + x_dep + " y : " + y_dep + " capacity : " + capacity_dep)
+
+for i in f:
+    currentLineCustomer = i.split("   ")
+    x = currentLineCustomer[0]
+    y = currentLineCustomer[1]
+    delivery = currentLineCustomer[2]
+    pickup = currentLineCustomer[3]
+    print("x: " + x + " y : " + y + " delivery : " + delivery + " pickup : " + pickup)
 
 
 f.close()
