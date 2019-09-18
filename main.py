@@ -51,13 +51,14 @@ cont2=0
 
 for i in clients:
     for j in clients:
-        if(cont1!=cont2):
+        if(i!=j):
             d=distanza(i[0], i[1], j[0], j[1])
             costs[cont1, cont2] = d
         else:
             costs[cont1, cont2]=0
         cont2+=1
     cont1+=1
+    cont2=0
 
 
 
