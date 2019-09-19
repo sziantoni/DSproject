@@ -199,16 +199,15 @@ print(demand_pickup)
 def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles, demands, type):
     start = 0
     end = 0
-    route1 = []
-    route2 = []
+    route1 = 0
+    route2 = 0
     flag1 = False
     flag2 = False
-
+    counter = 0
     for i in savings_list:
         best_saving = i
         flag1 = False
         flag2 = False
-        counter = 0
         for r in routes:
             counterR = 0
             for n in r:
@@ -242,7 +241,7 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                                     route2 = counter
                                 flag2 = True
                 counterR+=1
-        counter += 1
+
         if start != 0 and end != 0:
             if type == 0:  # presupponiamo 0 sia il pickup e 1 il delivery
                 counter_demands = 0
@@ -256,7 +255,8 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                     del routes[route1]
                     del routes[route2]
                     routes.append(new_route)
-                    np.delete(saving, best_saving, 0)
+                    np.delete(saving, best_saving)
+        counter += 1
 
     return routes
 
