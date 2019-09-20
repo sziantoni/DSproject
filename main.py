@@ -60,8 +60,8 @@ for i in f:
     else:
         clients_delivery.append((float(x), float(y)))
         demand_delivery.append(delivery)
-        if count_delivery > 0:
-            routes_delivery.append([0, count_pickup + count_delivery, 0])
+        if count_delivery >= 0:
+            routes_delivery.append([0, count_pickup + (count_delivery-1), 0])
         count_delivery += 1
 
 f.close()
@@ -203,61 +203,70 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
     route2 = 0
     flag1 = False
     flag2 = False
-    counter = 0
+
     for i in savings_list:
+        counter = 0
         best_saving = i
+        start_route = []
+        end_route = []
         flag1 = False
         flag2 = False
         for r in routes:
             counterR = 0
             for n in r:
-                if best_saving[0] == n and n != 0:
-                    if r[counterR + 1] == 0 and flag1 == False:
-                        start = n
-                        start_route = r[:counterR + 1]
-                        if counter != route2:
-                            route1 = counter
-                        flag1 = True
-                    else:
-                        if (r[counterR - 1] == 0) and (flag2 == False):
-                            end = n
-                            end_route = r[counterR:]
-                            if counter != route1:
-                                route2 = counter
-                            flag2 = True
-                else:
-                    if best_saving[1] == n and n != 0:
+                if n not in start_route or n not in end_route:
+                    if best_saving[0] == n and n != 0:
                         if r[counterR + 1] == 0 and flag1 == False:
                             start = n
-                            start_route = r[:counterR]
+                            start_route = r[:counterR + 1]
                             if counter != route2:
                                 route1 = counter
-                            flag1 = True
+                                flag1 = True
                         else:
-                            if r[counterR - 1] == 0 and flag2 == False:
+                            if (r[counterR - 1] == 0) and (flag2 == False):
                                 end = n
                                 end_route = r[counterR:]
                                 if counter != route1:
                                     route2 = counter
                                 flag2 = True
-                counterR+=1
+                    else:
+                        if best_saving[1] == n and n != 0:
+                            if r[counterR + 1] == 0 and flag1 == False:
+                                start = n
+                                start_route = r[:counterR + 1]
+                                if counter != route2:
+                                    route1 = counter
+                                flag1 = True
+                            else:
+                                if r[counterR - 1] == 0 and flag2 == False:
+                                    end = n
+                                    end_route = r[counterR:]
+                                    if counter != route1:
+                                        route2 = counter
+                                    flag2 = True
+                    counterR += 1
+                counter += 1
+                if start != 0 and end != 0 and flag1 and flag2:
+                    flag1 = False
+                    flag2 = False
+                    if type == 0:  # presupponiamo 0 sia il pickup e 1 il delivery
+                        counter_demands = 0
+                        demand_total = 0
+                        for x in range(len(demands)):
+                            if (x + 1 in start_route) or (x + 1 in end_route):
+                                demand_total += demands[x]
+                        if float(demand_total) <= float(capacity_limit):
+                            new_route = start_route + end_route
+                            for i in range(len(routes)):
+                                if i == route1:
+                                    del routes[i]
+                            for i in range(len(routes)):
+                                if i == route2 - 1:
+                                    del routes[i]
 
-        if start != 0 and end != 0:
-            if type == 0:  # presupponiamo 0 sia il pickup e 1 il delivery
-                counter_demands = 0
-                demand_total = 0
-                for d in demands:
-                    if (counter_demands + 1 in start_route) or (counter_demands in end_route):
-                        demand_total += d
-
-                if float(demand_total) <= float(capacity_limit):
-                    new_route = start_route + end_route
-                    del routes[route1]
-                    del routes[route2]
-                    routes.append(new_route)
-                    np.delete(saving, best_saving)
-        counter += 1
-
+                            routes.append(new_route)
+                            start_route = []
+                            end_route = []
     return routes
 
 
