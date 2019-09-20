@@ -210,8 +210,12 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
     nodeUsed=[]
 
     for i in savings_list:
+        alreadyUsed=False
         counter = 0
         best_saving = i
+        if best_saving == (1, 3, 710) :
+            x=1
+
         start_route = []
         end_route = []
         flag1 = False
@@ -258,6 +262,8 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                                 counterR += 1
         if alreadyUsed == False :
             if firstUsed and secondUsed :
+                firstUsed=False
+                secondUsed=False
                 if start != 0 and end != 0 and flag1 and flag2:
                     flag1 = False
                     flag2 = False
