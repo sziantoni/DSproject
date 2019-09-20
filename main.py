@@ -201,8 +201,13 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
     end = 0
     route1 = 0
     route2 = 0
+    routes_result=[]
     flag1 = False
     flag2 = False
+    alreadyUsed = False
+    firstUsed = False
+    secondUsed = False
+    nodeUsed=[]
 
     for i in savings_list:
         counter = 0
@@ -211,41 +216,48 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
         end_route = []
         flag1 = False
         flag2 = False
-        for r in routes:
-            counterR = 0
-            for n in r:
-                if n not in start_route or n not in end_route:
-                    if best_saving[0] == n and n != 0:
-                        if r[counterR + 1] == 0 and flag1 == False:
-                            start = n
-                            start_route = r[:counterR + 1]
-                            if counter != route2:
-                                route1 = counter
-                                flag1 = True
-                        else:
-                            if (r[counterR - 1] == 0) and (flag2 == False):
-                                end = n
-                                end_route = r[counterR:]
-                                if counter != route1:
-                                    route2 = counter
-                                flag2 = True
+        if routes_result!=[[]] :
+            for j in range(len(routes_result)):
+                if best_saving[0] in routes_result[j] and best_saving[1] in routes_result[j] :
+                    alreadyUsed = True
+                else:
+                    if best_saving[0] in routes_result[j] and best_saving[1] not in routes_result[j]  and routes_result[j] != []:
+                        firstUsed = True
+                        counterR=0
+                        for r in routes_result[j]:
+                            if best_saving[0] == r and r != 0:
+                                if routes_result[j][counterR + 1] == 0 and flag1 == False:
+                                    route1 = j
+                                    start = r
+                                    start_route = routes_result[j][:counterR + 1]
+                                    flag1 = True
+                                else:
+                                    if (routes_result[j][counterR - 1] == 0) and (flag2 == False):
+                                        route1 = j
+                                        end = r
+                                        end_route = routes_result[j][counterR:]
+                                        flag2 = True
+                            counterR+=1
                     else:
-                        if best_saving[1] == n and n != 0:
-                            if r[counterR + 1] == 0 and flag1 == False:
-                                start = n
-                                start_route = r[:counterR + 1]
-                                if counter != route2:
-                                    route1 = counter
-                                flag1 = True
-                            else:
-                                if r[counterR - 1] == 0 and flag2 == False:
-                                    end = n
-                                    end_route = r[counterR:]
-                                    if counter != route1:
-                                        route2 = counter
-                                    flag2 = True
-                    counterR += 1
-                counter += 1
+                        if best_saving[0] not in routes_result[j] and best_saving[1] in routes_result[j] and routes_result[j] != []:
+                            secondUsed = True
+                            counterR = 0
+                            for r in routes_result[j]:
+                                if best_saving[1] == r and r != 0:
+                                    if routes_result[j][counterR + 1] == 0 and flag1 == False:
+                                        route2 = j
+                                        start = r
+                                        start_route = routes_result[j][:counterR + 1]
+                                        flag1 = True
+                                    else:
+                                        if (routes_result[j][counterR - 1] == 0) and (flag2 == False):
+                                            route1 = j
+                                            end = r
+                                            end_route = routes_result[j][counterR:]
+                                            flag2 = True
+                                counterR += 1
+        if alreadyUsed == False :
+            if firstUsed and secondUsed :
                 if start != 0 and end != 0 and flag1 and flag2:
                     flag1 = False
                     flag2 = False
@@ -257,17 +269,101 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                                 demand_total += demands[x]
                         if float(demand_total) <= float(capacity_limit):
                             new_route = start_route + end_route
-                            for i in range(len(routes)):
-                                if i == route1:
-                                    del routes[i]
-                            for i in range(len(routes)):
-                                if i == route2 - 1:
-                                    del routes[i]
+                            del routes_result[route1]
+                            del routes_result[route2]
+                            routes_result.append(new_route)
+                            if start not in nodeUsed :
+                                nodeUsed.append(start)
+                            if end not in nodeUsed:
+                                nodeUsed.append(end)
+            else:
+                if firstUsed==True and secondUsed == False :
+                    firstUsed=False
+                    for r in routes:
+                        counterR = 0
+                        for j in r:
+                            if best_saving[1] == j and j != 0 and j not in nodeUsed:
+                                if r[counterR + 1] == 0 and flag1 == False:
+                                    start = j
+                                    start_route = r[:counterR + 1]
+                                    flag1 = True
+                                else:
+                                    if (r[counterR - 1] == 0) and (flag2 == False):
+                                        end = j
+                                        end_route = r[counterR:]
+                                        flag2 = True
+                            counterR += 1
+                    if start != 0 and end != 0 and flag1 and flag2:
+                        flag1 = False
+                        flag2 = False
+                        if type == 0:  # presupponiamo 0 sia il pickup e 1 il delivery
+                            counter_demands = 0
+                            demand_total = 0
+                            for x in range(len(demands)):
+                                if (x + 1 in start_route) or (x + 1 in end_route):
+                                    demand_total += demands[x]
+                            if float(demand_total) <= float(capacity_limit):
+                                new_route = start_route + end_route
+                                del routes_result[route1]
+                                routes_result.append(new_route)
+                                if start not in nodeUsed :
+                                    nodeUsed.append(start)
+                                if end not in nodeUsed:
+                                    nodeUsed.append(end)
+                else:
+                    if firstUsed == False and secondUsed == True:
+                        secondUsed=False
+                        for r in routes:
+                            counterR = 0
+                            for j in r:
+                                if best_saving[0] == j and j != 0 and j not in nodeUsed:
+                                    if r[counterR + 1] == 0 and flag1 == False:
+                                        start = j
+                                        start_route = r[:counterR + 1]
+                                        flag1 = True
+                                    else:
+                                        if r[counterR - 1] == 0 and (flag2 == False):
+                                            end = j
+                                            end_route = r[counterR:]
+                                            flag2 = True
+                                counterR += 1
+                        if start != 0 and end != 0 and flag1 and flag2:
+                            flag1 = False
+                            flag2 = False
+                            if type == 0:  # presupponiamo 0 sia il pickup e 1 il delivery
+                                counter_demands = 0
+                                demand_total = 0
+                                for x in range(len(demands)):
+                                    if (x + 1 in start_route) or (x + 1 in end_route):
+                                        demand_total += demands[x]
+                                if float(demand_total) <= float(capacity_limit):
+                                    new_route = start_route + end_route
+                                    del routes_result[route2]
+                                    routes_result.append(new_route)
+                                    if start not in nodeUsed:
+                                        nodeUsed.append(start)
+                                    if end not in nodeUsed:
+                                        nodeUsed.append(end)
+                    else:
+                        alreadyUsed=False
+                        x = int(demands[best_saving[0]-1]) + int(demands[best_saving[1]-1])
+                        if x < int(capacity_limit) :
+                            start = best_saving[0]
+                            end = best_saving[1]
+                            new_route = [0,best_saving[0],best_saving[1],0]
+                            routes_result.append(new_route)
+                            if best_saving[0] not in nodeUsed:
+                                nodeUsed.append(start)
+                            if best_saving[1] not in nodeUsed:
+                                nodeUsed.append(end)
 
-                            routes.append(new_route)
-                            start_route = []
-                            end_route = []
-    return routes
+    for r in routes :
+        if r[1] not in nodeUsed:
+            routes_result.append(r)
+
+
+
+    return routes_result
 
 
 prova = CW_P(saving_list_pickup, saving_pickup, routes_pickup, capacity_dep, nVeicoli, demand_pickup, 0)
