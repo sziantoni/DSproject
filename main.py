@@ -281,7 +281,7 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                             if end not in nodeUsed:
                                 nodeUsed.append(end)
             else:
-                if firstUsed==True and secondUsed == False :
+                if firstUsed==True and secondUsed == False:
                     firstUsed=False
 
                     if flag1 :
@@ -344,17 +344,17 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                                         nodeUsed.append(end)
                     else:
                         alreadyUsed=False
-                        x = int(demands[best_saving[0]-1]) + int(demands[best_saving[1]-1])
-                        if x < int(capacity_limit):
-                            start = best_saving[0]
-                            end = best_saving[1]
-                            new_route = [0, best_saving[0], best_saving[1], 0]
-                            routes_result.append(new_route)
-                            if best_saving[0] not in nodeUsed:
-                                nodeUsed.append(start)
-                            if best_saving[1] not in nodeUsed:
-                                nodeUsed.append(end)
-
+                        if len(routes_result)< int(nVeicoli):
+                            x = int(demands[best_saving[0]-1]) + int(demands[best_saving[1]-1])
+                            if x < int(capacity_limit):
+                                start = best_saving[0]
+                                end = best_saving[1]
+                                new_route = [0, best_saving[0], best_saving[1], 0]
+                                routes_result.append(new_route)
+                                if best_saving[0] not in nodeUsed:
+                                    nodeUsed.append(start)
+                                if best_saving[1] not in nodeUsed:
+                                    nodeUsed.append(end)
     for r in routes:
         if r[1] not in nodeUsed:
             routes_result.append(r)
@@ -369,6 +369,9 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
 
     print(sorted(nodeUsed))
     print(len(nodeUsed))
+    print("N CLIENTI PICKUP - DELIVERY")
+    print(count_pickup)
+    print(count_delivery)
     return routes_result
 
 
