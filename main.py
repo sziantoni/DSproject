@@ -255,7 +255,7 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                                         flag1 = True
                                     else:
                                         if (routes_result[j][counterR - 1] == 0) and (flag2 == False):
-                                            route1 = j
+                                            route2 = j
                                             end = r
                                             end_route = routes_result[j][counterR:]
                                             flag2 = True
@@ -276,7 +276,7 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                         if float(demand_total) <= float(capacity_limit):
                             new_route = start_route + end_route
                             del routes_result[route1]
-                            del routes_result[route2]
+                            del routes_result[route2-1]
                             routes_result.append(new_route)
                             if start not in nodeUsed :
                                 nodeUsed.append(start)
@@ -285,20 +285,17 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
             else:
                 if firstUsed==True and secondUsed == False :
                     firstUsed=False
-                    for r in routes:
-                        counterR = 0
-                        for j in r:
-                            if best_saving[1] == j and j != 0 and j not in nodeUsed:
-                                if r[counterR + 1] == 0 and flag1 == False:
-                                    start = j
-                                    start_route = r[:counterR + 1]
-                                    flag1 = True
-                                else:
-                                    if (r[counterR - 1] == 0) and (flag2 == False):
-                                        end = j
-                                        end_route = r[counterR:]
-                                        flag2 = True
-                            counterR += 1
+
+                    if flag1 :
+                        end = best_saving[1]
+                        end_route = [best_saving[1],0]
+                        flag2 = True
+                    else:
+                        if flag2:
+                            start = best_saving[1]
+                            start_route = [0,best_saving[1]]
+                            flag1 = True
+
                     if start != 0 and end != 0 and flag1 and flag2:
                         flag1 = False
                         flag2 = False
@@ -319,20 +316,17 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                 else:
                     if firstUsed == False and secondUsed == True:
                         secondUsed=False
-                        for r in routes:
-                            counterR = 0
-                            for j in r:
-                                if best_saving[0] == j and j != 0 and j not in nodeUsed:
-                                    if r[counterR + 1] == 0 and flag1 == False:
-                                        start = j
-                                        start_route = r[:counterR + 1]
-                                        flag1 = True
-                                    else:
-                                        if r[counterR - 1] == 0 and (flag2 == False):
-                                            end = j
-                                            end_route = r[counterR:]
-                                            flag2 = True
-                                counterR += 1
+
+                        if flag1:
+                            end = best_saving[0]
+                            end_route = [best_saving[0], 0]
+                            flag2 = True
+                        else:
+                            if flag2:
+                                start = best_saving[0]
+                                start_route = [0, best_saving[0]]
+                                flag1 = True
+
                         if start != 0 and end != 0 and flag1 and flag2:
                             flag1 = False
                             flag2 = False
@@ -372,7 +366,7 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
     return routes_result
 
 
-prova = CW_P(saving_list_pickup, saving_pickup, routes_pickup, capacity_dep, nVeicoli, demand_pickup, 0)
+prova = CW_P(saving_list_delivery, saving_delivery, routes_delivery, capacity_dep, nVeicoli, demand_delivery, 0)
 
 print("PROVA")
 print(prova)
