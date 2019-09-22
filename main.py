@@ -68,9 +68,9 @@ f.close()
 routes_pickup.remove([])
 routes_delivery.remove([])
 
-print(demands)
-print(routes_pickup)
-print(routes_delivery)
+#print(demands)
+#print(routes_pickup)
+#print(routes_delivery)
 
 w = int(nClienti) + 1
 
@@ -173,23 +173,23 @@ saving_list = sorted(saving_list, key=lambda tup: tup[2], reverse=True)
 saving_list_delivery = sorted(saving_list_delivery, key=lambda tup: tup[2], reverse=True)
 saving_list_pickup = sorted(saving_list_pickup, key=lambda tup: tup[2], reverse=True)
 
-print("Saving list")
-print(saving_list)
-print("Saving list pick up")
-print(saving_list_pickup)
-print("Saving list delivery")
-print(saving_list_delivery)
+#print("Saving list")
+#print(saving_list)
+#print("Saving list pick up")
+#print(saving_list_pickup)
+#print("Saving list delivery")
+#print(saving_list_delivery)
 
-print("COST")
-print(costs)
-print("SAVING")
-print(saving)
-print("SAVING D")
-print(saving_delivery)
-print("SAVING P")
-print(saving_pickup)
-print("DEMANDS")
-print(demands)
+#print("COST")
+#print(costs)
+#print("SAVING")
+#print(saving)
+#print("SAVING D")
+#print(saving_delivery)
+#print("SAVING P")
+#print(saving_pickup)
+#print("DEMANDS")
+#print(demands)
 
 
 # LINEHAUL
@@ -344,17 +344,16 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                                         nodeUsed.append(end)
                     else:
                         alreadyUsed=False
-                        if len(routes_result)< int(nVeicoli):
-                            x = int(demands[best_saving[0]-1]) + int(demands[best_saving[1]-1])
-                            if x < int(capacity_limit):
-                                start = best_saving[0]
-                                end = best_saving[1]
-                                new_route = [0, best_saving[0], best_saving[1], 0]
-                                routes_result.append(new_route)
-                                if best_saving[0] not in nodeUsed:
-                                    nodeUsed.append(start)
-                                if best_saving[1] not in nodeUsed:
-                                    nodeUsed.append(end)
+                        x = int(demands[best_saving[0]-1]) + int(demands[best_saving[1]-1])
+                        if x < int(capacity_limit) and len(routes_result)<int(nVeicoli):
+                            start = best_saving[0]
+                            end = best_saving[1]
+                            new_route = [0, best_saving[0], best_saving[1], 0]
+                            routes_result.append(new_route)
+                            if best_saving[0] not in nodeUsed:
+                                nodeUsed.append(start)
+                            if best_saving[1] not in nodeUsed:
+                                nodeUsed.append(end)
     for r in routes:
         if r[1] not in nodeUsed:
             routes_result.append(r)
@@ -370,8 +369,12 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
     print(sorted(nodeUsed))
     print(len(nodeUsed))
     print("N CLIENTI PICKUP - DELIVERY")
-    print(count_pickup)
-    print(count_delivery)
+    print(count_pickup-1)
+    print(count_delivery-1)
+    print("nVeicoli")
+    print(nVeicoli)
+    print("capacità max")
+    print(capacity_limit)
     return routes_result
 
 
@@ -379,3 +382,9 @@ prova = CW_P(saving_list_delivery, saving_delivery, routes_delivery, capacity_de
 
 print("PROVA")
 print(prova)
+
+prova2 = CW_P(saving_list_pickup, saving_pickup, routes_pickup, capacity_dep, nVeicoli, demands, 0)
+
+print("PROVA2")
+print(prova2)
+
