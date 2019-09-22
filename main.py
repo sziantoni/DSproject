@@ -25,8 +25,7 @@ nVeicoli = f.readline()
 clients = []  # lista di tutti i clienti
 clients_pickup = []  # lista dei clienti con pickup
 clients_delivery = []  # lista dei clienti con delivery
-demand_pickup = []  # lista della domanda dei pickup
-demand_delivery = []  # lista della domanda dei delivery
+demands =[]
 routes_pickup = [[]]
 routes_delivery = [[]]
 
@@ -53,13 +52,13 @@ for i in f:
     # divisione tra delivery e pickup
     if delivery == 0:
         clients_pickup.append((float(x), float(y)))
-        demand_pickup.append(pickup)
+        demands.append(pickup)
         if count_pickup > 0:
             routes_pickup.append([0, count_pickup, 0])
         count_pickup += 1
     else:
         clients_delivery.append((float(x), float(y)))
-        demand_delivery.append(delivery)
+        demands.append(delivery)
         if count_delivery >= 0:
             routes_delivery.append([0, count_pickup + (count_delivery-1), 0])
         count_delivery += 1
@@ -69,8 +68,7 @@ f.close()
 routes_pickup.remove([])
 routes_delivery.remove([])
 
-print(demand_pickup)
-print(demand_delivery)
+print(demands)
 print(routes_pickup)
 print(routes_delivery)
 
@@ -140,21 +138,6 @@ for count1 in range(1, len(saving) + 1):
 
     count2 = 1
 
-for count1 in range(1, len(saving_delivery) + 1):
-    for count2 in range(1, len(saving_delivery) + 1):
-        if count1 != count2:
-            saving_delivery[count1 - 1, count2 - 1] = costs_delivery[count1][0] + costs_delivery[0][count2] - \
-                                                      costs_delivery[count1][count2]
-            if ((count1, count2, saving_delivery[count1 - 1, count2 - 1]) not in saving_list_delivery) and (
-                    (count2, count1, saving_delivery[count1 - 1, count2 - 1]) not in saving_list_delivery) and len(
-                saving_list_delivery) > 0:
-                saving_list_delivery.append((count1, count2, saving_delivery[count1 - 1, count2 - 1]))
-            else:
-                if (len(saving_list_delivery) == 0) and (count1 != count2):
-                    saving_list_delivery.append((count1, count2, saving_delivery[count1 - 1, count2 - 1]))
-
-    count2 = 1
-
 for count1 in range(1, len(saving_pickup) + 1):
     for count2 in range(1, len(saving_pickup) + 1):
         if count1 != count2:
@@ -168,6 +151,23 @@ for count1 in range(1, len(saving_pickup) + 1):
                 if (len(saving_list_pickup) == 0) and (count1 != count2):
                     saving_list_pickup.append((count1, count2, saving_pickup[count1 - 1, count2 - 1]))
     count2 = 1
+
+for count1 in range(1, len(saving_delivery) + 1):
+    for count2 in range(1, len(saving_delivery) + 1):
+        if count1 != count2:
+            saving_delivery[count1 - 1, count2 - 1] = costs_delivery[count1][0] + costs_delivery[0][count2] - \
+                                                      costs_delivery[count1][count2]
+            if ((count1, count2, saving_delivery[count1 - 1, count2 - 1]) not in saving_list_delivery) and (
+                    (count2, count1, saving_delivery[count1 - 1, count2 - 1]) not in saving_list_delivery) and len(
+                saving_list_delivery) > 0:
+                saving_list_delivery.append((count1+count_pickup-1, count2+count_pickup-1, saving_delivery[count1 - 1, count2 - 1]))
+            else:
+                if (len(saving_list_delivery) == 0) and (count1 != count2):
+                    saving_list_delivery.append((count1+count_pickup-1, count2+count_pickup-1, saving_delivery[count1 - 1, count2 - 1]))
+
+    count2 = 1
+
+
 
 saving_list = sorted(saving_list, key=lambda tup: tup[2], reverse=True)
 saving_list_delivery = sorted(saving_list_delivery, key=lambda tup: tup[2], reverse=True)
@@ -188,10 +188,8 @@ print("SAVING D")
 print(saving_delivery)
 print("SAVING P")
 print(saving_pickup)
-print("DEMAND DELIVERY")
-print(demand_delivery)
-print("DEMAND PICKUP")
-print(demand_pickup)
+print("DEMANDS")
+print(demands)
 
 
 # LINEHAUL
@@ -213,7 +211,7 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
         alreadyUsed=False
         counter = 0
         best_saving = i
-        if best_saving == (1, 3, 710) :
+        if best_saving == (21, 22, 484) :
             x=1
 
         start_route = []
@@ -347,26 +345,34 @@ def CW_P(savings_list, saving_matrix, routes, capacity_limit, number_of_vehicles
                     else:
                         alreadyUsed=False
                         x = int(demands[best_saving[0]-1]) + int(demands[best_saving[1]-1])
-                        if x < int(capacity_limit) :
+                        if x < int(capacity_limit):
                             start = best_saving[0]
                             end = best_saving[1]
-                            new_route = [0,best_saving[0],best_saving[1],0]
+                            new_route = [0, best_saving[0], best_saving[1], 0]
                             routes_result.append(new_route)
                             if best_saving[0] not in nodeUsed:
                                 nodeUsed.append(start)
                             if best_saving[1] not in nodeUsed:
                                 nodeUsed.append(end)
 
-    for r in routes :
+    for r in routes:
         if r[1] not in nodeUsed:
             routes_result.append(r)
 
+    demands_print=0
+    for r in routes_result :
+        for x in r :
+            if x != 0:
+                demands_print+=demands[x-1]
+        print(demands_print)
+        demands_print=0
 
-
+    print(sorted(nodeUsed))
+    print(len(nodeUsed))
     return routes_result
 
 
-prova = CW_P(saving_list_delivery, saving_delivery, routes_delivery, capacity_dep, nVeicoli, demand_delivery, 0)
+prova = CW_P(saving_list_delivery, saving_delivery, routes_delivery, capacity_dep, nVeicoli, demands, 0)
 
 print("PROVA")
 print(prova)
