@@ -139,7 +139,7 @@ for count1 in range(1, int(nClienti)):
     count2 = 1
 
 for count1 in range(1, count_pickup - 1):
-    for count2 in range(1, count_pickup - 1 + 1):
+    for count2 in range(1, count_pickup ):
         if count1 != count2:
             saving_pickup = costs_pickup[count1][0] + costs_pickup[0][count2] - costs_pickup[count1][count2]
 
@@ -153,18 +153,18 @@ for count1 in range(1, count_pickup - 1):
     count2 = 1
 
 for count1 in range(1, count_delivery - 1):
-    for count2 in range(1, count_delivery - 1):
+    for count2 in range(1, count_delivery ):
         if count1 != count2:
             saving_delivery = costs_delivery[count1][0] + costs_delivery[0][count2] - \
                               costs_delivery[count1][count2]
-            if ((count1, count2, saving_delivery) not in saving_list_delivery) and (
-                    (count2, count1, saving_delivery) not in saving_list_delivery) and len(saving_list_delivery) > 0:
+            if ((count1 + count_pickup -1 , count2 + count_pickup -1, saving_delivery) not in saving_list_delivery) and (
+                    (count2 + count_pickup -1, count1 + count_pickup -1, saving_delivery) not in saving_list_delivery) and len(saving_list_delivery) > 0:
                 saving_list_delivery.append(
-                    (count1 + count_pickup - 1, count2 + count_pickup - 1, saving_delivery))
+                    (count1 + count_pickup -1 , count2 + count_pickup -1, saving_delivery))
             else:
                 if (len(saving_list_delivery) == 0) and (count1 != count2):
                     saving_list_delivery.append(
-                        (count1 + count_pickup - 1, count2 + count_pickup - 1, saving_delivery))
+                        (count1 + count_pickup -1 , count2 + count_pickup -1, saving_delivery))
 
     count2 = 1
 
@@ -193,7 +193,6 @@ saving_list_pickup = sorted(saving_list_pickup, key=lambda tup: tup[2], reverse=
 
 
 # LINEHAUL
-
 def CW_P(savings_list, routes, capacity_limit, number_of_vehicles, demands):
     start = 0
     end = 0
@@ -267,8 +266,12 @@ def CW_P(savings_list, routes, capacity_limit, number_of_vehicles, demands):
                             demand_total += demands[x]
                     if float(demand_total) <= float(capacity_limit):
                         new_route = start_route + end_route
-                        del routes_result[route1]
-                        del routes_result[route2 - 1]
+                        if route1>route2:
+                            del routes_result[route2]
+                            del routes_result[route1 - 1]
+                        else:
+                            del routes_result[route1]
+                            del routes_result[route2 - 1]
                         routes_result.append(new_route)
                         if start not in nodeUsed:
                             nodeUsed.append(start)
