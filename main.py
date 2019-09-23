@@ -139,7 +139,7 @@ for count1 in range(1, int(nClienti)):
     count2 = 1
 
 for count1 in range(1, count_pickup - 1):
-    for count2 in range(1, count_pickup - 1 + 1):
+    for count2 in range(1, count_pickup ):
         if count1 != count2:
             saving_pickup = costs_pickup[count1][0] + costs_pickup[0][count2] - costs_pickup[count1][count2]
 
@@ -153,18 +153,18 @@ for count1 in range(1, count_pickup - 1):
     count2 = 1
 
 for count1 in range(1, count_delivery - 1):
-    for count2 in range(1, count_delivery - 1):
+    for count2 in range(1, count_delivery ):
         if count1 != count2:
             saving_delivery = costs_delivery[count1][0] + costs_delivery[0][count2] - \
                               costs_delivery[count1][count2]
-            if ((count1, count2, saving_delivery) not in saving_list_delivery) and (
-                    (count2, count1, saving_delivery) not in saving_list_delivery) and len(saving_list_delivery) > 0:
+            if ((count1 + count_pickup -1 , count2 + count_pickup -1, saving_delivery) not in saving_list_delivery) and (
+                    (count2 + count_pickup -1, count1 + count_pickup -1, saving_delivery) not in saving_list_delivery) and len(saving_list_delivery) > 0:
                 saving_list_delivery.append(
-                    (count1 + count_pickup - 1, count2 + count_pickup - 1, saving_delivery))
+                    (count1 + count_pickup -1 , count2 + count_pickup -1, saving_delivery))
             else:
                 if (len(saving_list_delivery) == 0) and (count1 != count2):
                     saving_list_delivery.append(
-                        (count1 + count_pickup - 1, count2 + count_pickup - 1, saving_delivery))
+                        (count1 + count_pickup -1 , count2 + count_pickup -1, saving_delivery))
 
     count2 = 1
 
