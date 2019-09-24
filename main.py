@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from typing import List
 import cw_p
+import cw_s
 import numpy
 import numpy as np
 
@@ -200,6 +201,7 @@ print("PROVA2")
 print(prova2)
 c = 0
 print("RISULTATO")
+
 if len(prova) <= len(prova2):
     prova2 = sorted(prova2, key=lambda ele: len(ele), reverse=False)
     prova = sorted(prova, key=lambda ele: len(ele), reverse=True)
@@ -241,3 +243,52 @@ else:
             print(prova[x])
             c+=1
 
+
+provaS_pickup=cw_s.CW_S(routes_pickup[0], saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli),demands)
+provaS_delivery=cw_s.CW_S(routes_delivery[0], saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
+print("Sequenziale Pickup")
+print(provaS_pickup)
+print("Sequenziale Delivery")
+print(provaS_delivery)
+
+c = 0
+if len(provaS_delivery) <= len(provaS_pickup):
+    provaS_pickup = sorted(provaS_pickup, key=lambda ele: len(ele), reverse=False)
+    provaS_delivery = sorted(provaS_delivery, key=lambda ele: len(ele), reverse=True)
+    for i in range(len(provaS_delivery)):
+        start_route = provaS_delivery[i][:-1]
+        end_route = provaS_pickup[i][1:]
+        print(" ")
+        print("Route " + str(c))
+        print("Costo Pickup: " )
+        print("Costo Delivery: " )
+        print(start_route + end_route)
+        c+=1
+    if c < len(provaS_delivery) + len(provaS_pickup):
+        for x in range(c,len(provaS_pickup)):
+            print(" ")
+            print("Route " + str(c))
+            print("Costo Pickup: ")
+            print("Costo Delivery: 0")
+            print(provaS_pickup[x])
+            c+=1
+else:
+    provaS_pickup = sorted(provaS_pickup, key=lambda ele: len(ele), reverse=True)
+    provaS_delivery = sorted(provaS_delivery, key=lambda ele: len(ele), reverse=False)
+    for i in range(len(provaS_pickup)):
+        start_route = provaS_pickup[i][:-1]
+        end_route = provaS_delivery[i][1:]
+        print(" ")
+        print("Route " + str(c))
+        print("Costo Pickup: " )
+        print("Costo Delivery: " )
+        print(start_route + end_route)
+        c+=1
+    if c < len(provaS_delivery) + len(provaS_pickup):
+        for x in range(c,len(provaS_delivery)):
+            print(" ")
+            print("Route " + str(x))
+            print("Costo Pickup: 0")
+            print("Costo Delivery: ")
+            print(provaS_delivery[x])
+            c+=1
