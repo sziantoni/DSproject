@@ -161,19 +161,4 @@ def CW_P(savings_list, routes, capacity_limit, number_of_vehicles, demands):
         if r[1] not in nodeUsed:
             routes_result.append(r)
 
-    demands_print = 0
-    for r in routes_result:
-        for x in r:
-            if x != 0:
-                demands_print += demands[x - 1]
-        print(demands_print)
-        final_cost.append(demands_print)
-        demands_print = 0
-
-    print(sorted(nodeUsed))
-    print(len(nodeUsed))
-    print("nVeicoli")
-    print(number_of_vehicles)
-    print("capacità max")
-    print(capacity_limit)
     return routes_result

@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from typing import List
 import cw_p
+import stamp
 import numpy
 import numpy as np
 
@@ -16,6 +17,7 @@ root = Tk()
 root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
                                            filetypes=(("txt", "*.txt"), ("all files", "*.*")))
 f = open(root.filename)
+print(root.filename)
 
 # Lettura numero clienti
 nClienti = f.readline()
@@ -169,75 +171,11 @@ saving_list = sorted(saving_list, key=lambda tup: tup[2], reverse=True)
 saving_list_delivery = sorted(saving_list_delivery, key=lambda tup: tup[2], reverse=True)
 saving_list_pickup = sorted(saving_list_pickup, key=lambda tup: tup[2], reverse=True)
 
-
-# print("Saving list")
-# print(saving_list)
-# print("Saving list pick up")
-# print(saving_list_pickup)
-# print("Saving list delivery")
-# print(saving_list_delivery)
-
-# print("COST")
-# print(costs)
-# print("SAVING")
-# print(saving)
-# print("SAVING D")
-# print(saving_delivery)
-# print("SAVING P")
-# print(saving_pickup)
-# print("DEMANDS")
-# print(demands)
-
 # BACKHAUL
 prova2 = cw_p.CW_P(saving_list_pickup, routes_pickup, capacity_dep, nVeicoli, demands)
 # LINEHAUL
 prova = cw_p.CW_P(saving_list_delivery, routes_delivery, capacity_dep, nVeicoli, demands)
+stamp.stampAll(prova2,prova,demands,costs,count_pickup,nVeicoli,capacity_dep,str(root.filename))
 
-print("PROVA")
-print(prova)
 
-print("PROVA2")
-print(prova2)
-c = 0
-print("RISULTATO")
-if len(prova) <= len(prova2):
-    prova2 = sorted(prova2, key=lambda ele: len(ele), reverse=False)
-    prova = sorted(prova, key=lambda ele: len(ele), reverse=True)
-    for i in range(len(prova)):
-        start_route = prova[i][:-1]
-        end_route = prova2[i][1:]
-        print(" ")
-        print("Route " + str(c))
-        print("Costo Pickup: " )
-        print("Costo Delivery: " )
-        print(start_route + end_route)
-        c+=1
-    if c < len(prova) + len(prova2):
-        for x in range(c,len(prova2)):
-            print(" ")
-            print("Route " + str(c))
-            print("Costo Pickup: ")
-            print("Costo Delivery: 0")
-            print(prova2[x])
-            c+=1
-else:
-    prova2 = sorted(prova2, key=lambda ele: len(ele), reverse=True)
-    prova = sorted(prova, key=lambda ele: len(ele), reverse=False)
-    for i in range(len(prova2)):
-        start_route = prova2[i][:-1]
-        end_route = prova[i][1:]
-        print(" ")
-        print("Route " + str(c))
-        print("Costo Pickup: " )
-        print("Costo Delivery: " )
-        print(start_route + end_route)
-        c+=1
-    if c < len(prova) + len(prova2):
-        for x in range(c,len(prova)):
-            print(" ")
-            print("Route " + str(x))
-            print("Costo Pickup: 0")
-            print("Costo Delivery: ")
-            print(prova[x])
-            c+=1
 
