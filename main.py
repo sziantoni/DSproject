@@ -243,9 +243,8 @@ else:
             print(prova[x])
             c+=1
 
-
-provaS_pickup=cw_s.CW_S(routes_pickup[0], saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli),demands)
-provaS_delivery=cw_s.CW_S(routes_delivery[0], saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
+provaS_pickup=cw_s.CW_S(routes_pickup[3], saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli),demands)
+provaS_delivery=cw_s.CW_S(routes_delivery[3], saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
 print("Sequenziale Pickup")
 print(provaS_pickup)
 print("Sequenziale Delivery")
