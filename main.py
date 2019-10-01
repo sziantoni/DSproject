@@ -3,6 +3,8 @@ from tkinter import filedialog
 from typing import List
 import cw_p
 import cw_s
+import RPA_Solutions
+import os
 import numpy
 import numpy as np
 
@@ -291,3 +293,14 @@ else:
             print("Costo Delivery: ")
             print(provaS_delivery[x])
             c+=1
+
+#Test dei risultati
+
+        filelist = []
+        os.chdir("C:\\Users\\kikko\\PycharmProjects\\DSproject\\RPA_Solutions")
+        l = os.listdir(os.getcwd())
+        for i in l:
+            if os.path.isfile(i):
+                filelist.append(i)
+        
+
