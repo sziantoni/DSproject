@@ -1,17 +1,23 @@
-def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nPickUp, nVeicoli, capacità, fileName):
+def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nVeicoli, capacità, fileName, type):
 
     fileName = fileName[len(fileName)-6:]
-    f = open("Result_"+fileName, "w+")
+    if type==0:
+        f = open("Parallel_Result_"+fileName, "w+")
+    else:
+        if type==1:
+            f = open("Sequential_Result_" + fileName, "w+")
+
 
     f.write("Risultato\n")
     f.write(" \n")
-    f.write("Numero di Veicoli: " + nVeicoli + "\n")
-    f.write("Capacita' massima: " + capacità + "\n")
+    f.write("Numero di Veicoli: " + str(nVeicoli) + "\n")
+    f.write("Capacita' massima: " + str(capacità) + "\n")
     c = 0
-
+    totalcost = 0
     if len(routes_delivery) <= len(routes_pickup):
         routes_pickup = sorted(routes_pickup, key=lambda ele: len(ele), reverse=False)
         routes_delivery = sorted(routes_delivery, key=lambda ele: len(ele), reverse=True)
+
         for i in range(len(routes_delivery)):
             cost = 0
             demands_delivery = 0
@@ -41,6 +47,7 @@ def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nPickUp, nVei
             f.write("Costo Totale: " + str(cost) + "\n")
             f.write("Sequenza dei vertici  " + str(new_route) + "\n")
             c += 1
+            totalcost+=cost
         if c < len(routes_delivery) + len(routes_pickup):
             for x in range(c, len(routes_pickup)):
                 cost = 0
@@ -66,6 +73,7 @@ def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nPickUp, nVei
                 f.write("Costo Totale: " + str(cost) + "\n")
                 f.write("Sequenza dei vertici  " + str(new_route) + "\n")
                 c += 1
+                totalcost+=cost
     else:
         routes_pickup = sorted(routes_pickup, key=lambda ele: len(ele), reverse=True)
         routes_delivery = sorted(routes_delivery, key=lambda ele: len(ele), reverse=False)
@@ -121,5 +129,8 @@ def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nPickUp, nVei
                 f.write("Costo Totale: " + str(cost) + "\n")
                 f.write("Sequenza dei vertici  " + str(new_route) + "\n")
                 c += 1
-
+                totalcost+=cost
+    f.write(" " + "\n")
+    f.write("Total Cost:" + str(totalcost) + "\n")
+    f.close
     return 0
