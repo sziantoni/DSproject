@@ -302,5 +302,7 @@ else:
         for i in l:
             if os.path.isfile(i):
                 filelist.append(i)
-        
+
+        for f in filelist:
+
 
