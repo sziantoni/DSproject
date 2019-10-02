@@ -105,6 +105,7 @@ def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nVeicoli, cap
             f.write("Costo Totale: " + str(cost) + "\n")
             f.write("Sequenza dei vertici  " + str(new_route) + "\n")
             c += 1
+            totalcost += cost
         if c < len(routes_delivery) + len(routes_pickup):
             for x in range(c, len(routes_delivery)):
                 cost = 0

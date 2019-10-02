@@ -77,6 +77,7 @@ def merge(routes_pickup, routes_delivery, demands, cost_matrix):
                         demands_delivery += demands[j - 1]
 
             c += 1
+            totalcost += cost
         if c < len(routes_delivery) + len(routes_pickup):
             for x in range(c, len(routes_delivery)):
                 cost = 0

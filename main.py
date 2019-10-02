@@ -7,6 +7,7 @@ import RPA_Solutions
 import os
 import numpy
 import numpy as np
+import stamp
 
 
 def distanza(x1, y1, x2, y2):
@@ -173,124 +174,16 @@ saving_list_delivery = sorted(saving_list_delivery, key=lambda tup: tup[2], reve
 saving_list_pickup = sorted(saving_list_pickup, key=lambda tup: tup[2], reverse=True)
 
 
-# print("Saving list")
-# print(saving_list)
-# print("Saving list pick up")
-# print(saving_list_pickup)
-# print("Saving list delivery")
-# print(saving_list_delivery)
 
-# print("COST")
-# print(costs)
-# print("SAVING")
-# print(saving)
-# print("SAVING D")
-# print(saving_delivery)
-# print("SAVING P")
-# print(saving_pickup)
-# print("DEMANDS")
-# print(demands)
 
 # BACKHAUL
 prova2 = cw_p.CW_P(saving_list_pickup, routes_pickup, capacity_dep, nVeicoli, demands)
 # LINEHAUL
 prova = cw_p.CW_P(saving_list_delivery, routes_delivery, capacity_dep, nVeicoli, demands)
 
-print("PROVA")
-print(prova)
-
-print("PROVA2")
-print(prova2)
-c = 0
-print("RISULTATO")
-
-if len(prova) <= len(prova2):
-    prova2 = sorted(prova2, key=lambda ele: len(ele), reverse=False)
-    prova = sorted(prova, key=lambda ele: len(ele), reverse=True)
-    for i in range(len(prova)):
-        start_route = prova[i][:-1]
-        end_route = prova2[i][1:]
-        print(" ")
-        print("Route " + str(c))
-        print("Costo Pickup: " )
-        print("Costo Delivery: " )
-        print(start_route + end_route)
-        c+=1
-    if c < len(prova) + len(prova2):
-        for x in range(c,len(prova2)):
-            print(" ")
-            print("Route " + str(c))
-            print("Costo Pickup: ")
-            print("Costo Delivery: 0")
-            print(prova2[x])
-            c+=1
-else:
-    prova2 = sorted(prova2, key=lambda ele: len(ele), reverse=True)
-    prova = sorted(prova, key=lambda ele: len(ele), reverse=False)
-    for i in range(len(prova2)):
-        start_route = prova2[i][:-1]
-        end_route = prova[i][1:]
-        print(" ")
-        print("Route " + str(c))
-        print("Costo Pickup: " )
-        print("Costo Delivery: " )
-        print(start_route + end_route)
-        c+=1
-    if c < len(prova) + len(prova2):
-        for x in range(c,len(prova)):
-            print(" ")
-            print("Route " + str(x))
-            print("Costo Pickup: 0")
-            print("Costo Delivery: ")
-            print(prova[x])
-            c+=1
 
 provaS_pickup=cw_s.CW_S(routes_pickup[3], saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli),demands)
 provaS_delivery=cw_s.CW_S(routes_delivery[3], saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
-print("Sequenziale Pickup")
-print(provaS_pickup)
-print("Sequenziale Delivery")
-print(provaS_delivery)
 
-c = 0
-if len(provaS_delivery) <= len(provaS_pickup):
-    provaS_pickup = sorted(provaS_pickup, key=lambda ele: len(ele), reverse=False)
-    provaS_delivery = sorted(provaS_delivery, key=lambda ele: len(ele), reverse=True)
-    for i in range(len(provaS_delivery)):
-        start_route = provaS_delivery[i][:-1]
-        end_route = provaS_pickup[i][1:]
-        print(" ")
-        print("Route " + str(c))
-        print("Costo Pickup: " )
-        print("Costo Delivery: " )
-        print(start_route + end_route)
-        c+=1
-    if c < len(provaS_delivery) + len(provaS_pickup):
-        for x in range(c,len(provaS_pickup)):
-            print(" ")
-            print("Route " + str(c))
-            print("Costo Pickup: ")
-            print("Costo Delivery: 0")
-            print(provaS_pickup[x])
-            c+=1
-else:
-    provaS_pickup = sorted(provaS_pickup, key=lambda ele: len(ele), reverse=True)
-    provaS_delivery = sorted(provaS_delivery, key=lambda ele: len(ele), reverse=False)
-    for i in range(len(provaS_pickup)):
-        start_route = provaS_pickup[i][:-1]
-        end_route = provaS_delivery[i][1:]
-        print(" ")
-        print("Route " + str(c))
-        print("Costo Pickup: " )
-        print("Costo Delivery: " )
-        print(start_route + end_route)
-        c+=1
-    if c < len(provaS_delivery) + len(provaS_pickup):
-        for x in range(c,len(provaS_delivery)):
-            print(" ")
-            print("Route " + str(x))
-            print("Costo Pickup: 0")
-            print("Costo Delivery: ")
-            print(provaS_delivery[x])
-            c+=1
-
+stamp.stampAll(prova2,prova,demands,costs,nVeicoli,capacity_dep,root.filename,0)
+stamp.stampAll(provaS_pickup,provaS_delivery,demands,costs,nVeicoli,capacity_dep,root.filename,1)

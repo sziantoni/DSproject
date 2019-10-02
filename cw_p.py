@@ -1,8 +1,4 @@
 def CW_P(savings_list, routes, capacity_limit, number_of_vehicles, demands):
-    count_pickup = 1
-    count_delivery = 1
-
-    final_cost = []
     start = 0
     end = 0
     route1 = 0
@@ -25,7 +21,8 @@ def CW_P(savings_list, routes, capacity_limit, number_of_vehicles, demands):
                 if best_saving[0] in routes_result[j] and best_saving[1] in routes_result[j]:
                     alreadyUsed = True
                 else:
-                    if best_saving[0] in routes_result[j] and best_saving[1] not in routes_result[j] and routes_result[j] != []:
+                    if best_saving[0] in routes_result[j] and best_saving[1] not in routes_result[j] and routes_result[
+                        j] != []:
                         firstUsed = True
                         counterR = 0
                         for r in routes_result[j]:
@@ -75,7 +72,7 @@ def CW_P(savings_list, routes, capacity_limit, number_of_vehicles, demands):
                             demand_total += demands[x]
                     if float(demand_total) <= float(capacity_limit):
                         new_route = start_route + end_route
-                        if route1>route2:
+                        if route1 > route2:
                             del routes_result[route2]
                             del routes_result[route1 - 1]
                         else:
