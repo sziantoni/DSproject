@@ -187,3 +187,4 @@ provaS_delivery=cw_s.CW_S(routes_delivery[3], saving_list_delivery, routes_deliv
 
 stamp.stampAll(prova2,prova,demands,costs,nVeicoli,capacity_dep,root.filename,0)
 stamp.stampAll(provaS_pickup,provaS_delivery,demands,costs,nVeicoli,capacity_dep,root.filename,1)
+x=0
