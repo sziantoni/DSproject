@@ -294,15 +294,3 @@ else:
             print(provaS_delivery[x])
             c+=1
 
-#Test dei risultati
-
-        filelist = []
-        os.chdir("C:\\Users\\kikko\\PycharmProjects\\DSproject\\RPA_Solutions")
-        l = os.listdir(os.getcwd())
-        for i in l:
-            if os.path.isfile(i):
-                filelist.append(i)
-
-        for f in filelist:
-
-
