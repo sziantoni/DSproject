@@ -1,5 +1,7 @@
 import random
-def CW_S(start, savings_list, routes, capacity_limit, number_of_vehicles, demands):
+import copy
+def CW_S(start, savings_list, routesOriginal, capacity_limit, number_of_vehicles, demands):
+   routes= copy.copy(routesOriginal)
    if start in routes:
        number_of_vehicles-=1
        routes.remove(start)
