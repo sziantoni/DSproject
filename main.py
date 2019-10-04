@@ -8,6 +8,7 @@ import os
 import numpy
 import numpy as np
 import stamp
+import random
 
 
 def distanza(x1, y1, x2, y2):
@@ -175,15 +176,19 @@ saving_list_pickup = sorted(saving_list_pickup, key=lambda tup: tup[2], reverse=
 
 
 
-
+#Parallelo
 # BACKHAUL
 prova2 = cw_p.CW_P(saving_list_pickup, routes_pickup, capacity_dep, nVeicoli, demands)
 # LINEHAUL
 prova = cw_p.CW_P(saving_list_delivery, routes_delivery, capacity_dep, nVeicoli, demands)
 
 
-provaS_pickup=cw_s.CW_S(routes_pickup[3], saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli),demands)
-provaS_delivery=cw_s.CW_S(routes_delivery[3], saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
+i=random.randint(0, len(routes_pickup)-1)
+j=random.randint(0, len(routes_delivery)-1)
+print("Start route Pickup:" + str(i))
+print("Start route Delivery:" + str(j))
+provaS_pickup=cw_s.CW_S(routes_pickup[i], saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli),demands)
+provaS_delivery=cw_s.CW_S(routes_delivery[j], saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
 
 stamp.stampAll(prova2,prova,demands,costs,nVeicoli,capacity_dep,root.filename,0)
 stamp.stampAll(provaS_pickup,provaS_delivery,demands,costs,nVeicoli,capacity_dep,root.filename,1)
