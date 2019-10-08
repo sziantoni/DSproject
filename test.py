@@ -18,7 +18,7 @@ def distanza(x1, y1, x2, y2):
 
 
 istances = []
-os.chdir("C:\\Users\\Stefano\\PycharmProjects\\DSproject\\Instances")
+os.chdir("C:\\Users\\nosch\\PycharmProjects\\DSproject\\Instances")
 l = os.listdir(os.getcwd())
 for i in l:
     if os.path.isfile(i):
@@ -211,13 +211,4 @@ for inst in istances:
 
 
 
-
-
-
-'''
-for f in filelist:
-    indice = 0
-    while indice < len(f):
-        if indice == (len(f) - 6):
-'''
 

@@ -1,4 +1,4 @@
-def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nVeicoli, capacità, fileName, type):
+def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nVeicoli, capacità, fileName, type, tempo):
 
     fileName = fileName[len(fileName)-6:]
     if type==0:
