@@ -12,6 +12,7 @@ def stampAll(routes_pickup, routes_delivery, demands, cost_matrix, nVeicoli, cap
     f.write(" \n")
     f.write("Numero di Veicoli: " + str(nVeicoli) + "\n")
     f.write("Capacita' massima: " + str(capacità) + "\n")
+    f.write("Tempo di esecuzione:" + str(tempo) + "\n")
     c = 0
     totalcost = 0
     if len(routes_delivery) <= len(routes_pickup):
