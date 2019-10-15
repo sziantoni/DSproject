@@ -17,10 +17,8 @@ def distanza(x1, y1, x2, y2):
     return sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
 
-costPar = [[]]
-costSeq = [[]]
 istances = []
-os.chdir("C:\\Users\\kikko\\PycharmProjects\\DSproject\\Instances")
+os.chdir("C:\\Users\\nosch\\PycharmProjects\\DSproject\\Instances")
 l = os.listdir(os.getcwd())
 for i in l:
     if os.path.isfile(i):
@@ -28,15 +26,13 @@ for i in l:
             istances.append(i)
 
 print(istances)
-counter = 0
-
 
 for inst in istances:
-
     f = open(inst, "r")
     # Lettura numero clienti
     nClienti = f.readline()
     f.readline()
+
     # Lettura numero veicoli
     nVeicoli = f.readline()
     clients = []  # lista di tutti i clienti
@@ -192,82 +188,27 @@ for inst in istances:
     parallel_routesDelivery = cw_p.CW_P(saving_list_delivery, routes_delivery, capacity_dep, nVeicoli, demands)
     x=0
     x = merge.merge(parallel_routesPickup, parallel_routesDelivery, demands, costs)
+    print("Stampa costi parallelo " + inst )
+    print(x)
 
-    costPar.append([inst, str(x)])
-
-
-
+    #idx = 0
+    #while idx < int(nClienti):
     seq_routesPickup = []
     seq_routesDelivery=[]
     y=0
-    mean = 0
-    j = 0
+    # BACKHAUL Sequenziale
+    if len(routes_pickup) >0 :
+        seq_routesPickup = cw_s.CW_S(routes_pickup[1], saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli), demands)
+    # LINEHAUL Sequenziale
+    if len(routes_delivery)>0:
+        seq_routesDelivery = cw_s.CW_S(routes_delivery[1], saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli),demands)
 
-    if len(routes_pickup) > 0 and len(routes_delivery) > 0:
-        pickup=len(routes_pickup)
-        deliv = len(routes_delivery)
-        for n in routes_pickup:
-            # BACKHAUL Sequenziale
-            seq_routesPickup = cw_s.CW_S(n, saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli), demands)
-
-            for j in routes_delivery:
-                # LINEHAUL Sequenziale
-                seq_routesDelivery = cw_s.CW_S(j, saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
-                y = merge.merge(seq_routesPickup, seq_routesDelivery, demands, costs)
-                if(mean == 0 or (mean > 0 and y < mean)):
-                    mean = y
-
-    else:
-        if len(routes_pickup) >0  and len(routes_delivery) == 0:
-            pickup = len(routes_pickup)
-            for n in routes_pickup:
-                # BACKHAUL Sequenziale
-                seq_routesPickup = cw_s.CW_S(n, saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli), demands)
-                y = merge.merge(seq_routesPickup, seq_routesDelivery, demands, costs)
-                if (mean == 0 or (mean > 0 and y < mean)):
-                    mean = y
-        else:
-            if len(routes_pickup) == 0 and len(routes_delivery)>0:
-                deliv = len(routes_delivery)
-                for j in routes_delivery:
-                    # LINEHAUL Sequenziale
-                    seq_routesDelivery = cw_s.CW_S(j, saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
-                    y = merge.merge(seq_routesPickup, seq_routesDelivery, demands, costs)
-                    if (mean == 0 or (mean > 0 and y < mean)):
-                        mean = y
-    print(mean)
-    costSeq.append([inst, str(mean)])
-    counter +=1
+    y = merge.merge(seq_routesPickup, seq_routesDelivery, demands, costs)
+    print("Stampa costi sequenziale " + inst )
+    #print("iterazione n." + str(idx))
+    print(y)
     #idx+=1
 
-print (counter)
 
 
-
-
-
-os.chdir("C:\\Users\\kikko\\PycharmProjects\\DSproject\\RPA_Solutions")
-
-costiP = open("CostiParallelo.txt", "w")
-for i in range(0, counter-1):
-    costiP.write(str(costPar[i]))
-costiP.close()
-
-costiS = open("CostiSequenziale.txt", "w")
-for i in range(0, counter-1):
-    costiS.write(str(costSeq[i]))
-costiS.close()
-
-
-
-
-
-
-
-'''
-for f in filelist:
-    indice = 0
-    while indice < len(f):
-        if indice == (len(f) - 6):
-'''
 

@@ -3,12 +3,10 @@ from tkinter import filedialog
 from typing import List
 import cw_p
 import cw_s
-import RPA_Solutions
-import os
-import numpy
 import numpy as np
 import stamp
 import random
+import time
 
 
 def distanza(x1, y1, x2, y2):
@@ -178,18 +176,21 @@ saving_list_pickup = sorted(saving_list_pickup, key=lambda tup: tup[2], reverse=
 
 #Parallelo
 # BACKHAUL
+start_timeParallelo=time.time()
 prova2 = cw_p.CW_P(saving_list_pickup, routes_pickup, capacity_dep, nVeicoli, demands)
 # LINEHAUL
 prova = cw_p.CW_P(saving_list_delivery, routes_delivery, capacity_dep, nVeicoli, demands)
+print("Parallelo: %s seconds" %(time.time()-start_timeParallelo))
+stamp.stampAll(prova2,prova,demands,costs,nVeicoli,capacity_dep,root.filename,0, time.time()-start_timeParallelo)
+
 
 
 i=random.randint(0, len(routes_pickup)-1)
 j=random.randint(0, len(routes_delivery)-1)
 print("Start route Pickup:" + str(i))
 print("Start route Delivery:" + str(j))
+start_timeSequenziale=time.time()
 provaS_pickup=cw_s.CW_S(routes_pickup[i], saving_list_pickup, routes_pickup, capacity_dep, int(nVeicoli),demands)
 provaS_delivery=cw_s.CW_S(routes_delivery[j], saving_list_delivery, routes_delivery, capacity_dep, int(nVeicoli), demands)
-
-stamp.stampAll(prova2,prova,demands,costs,nVeicoli,capacity_dep,root.filename,0)
-stamp.stampAll(provaS_pickup,provaS_delivery,demands,costs,nVeicoli,capacity_dep,root.filename,1)
-x=0
+print("Sequenziale: %s seconds" %(time.time()-start_timeSequenziale))
+stamp.stampAll(provaS_pickup,provaS_delivery,demands,costs,nVeicoli,capacity_dep,root.filename,1, time.time()-start_timeSequenziale)
